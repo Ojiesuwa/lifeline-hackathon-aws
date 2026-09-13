@@ -1,0 +1,260 @@
+.incoming-call {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 38%,
+      rgba(45, 100, 255, 0.13),
+      transparent 35%
+    ),
+    #05070d;
+
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.incoming-call__glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  background: rgba(40, 100, 255, 0.12);
+  filter: blur(90px);
+
+  pointer-events: none;
+}
+
+.incoming-call__content {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 70px 24px 45px;
+}
+
+.incoming-call__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+}
+
+.incoming-call__label svg {
+  color: #6d9cff;
+}
+
+/* Avatar */
+
+.caller-avatar-wrapper {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 150px;
+  height: 150px;
+
+  margin-top: 58px;
+}
+
+.caller-ring {
+  position: absolute;
+
+  width: 130px;
+  height: 130px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(90, 140, 255, 0.35);
+}
+
+.caller-ring--two {
+  width: 130px;
+  height: 130px;
+}
+
+.caller-avatar {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 112px;
+  height: 112px;
+
+  border-radius: 50%;
+
+  color: #a9c5ff;
+
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(100, 150, 255, 0.25),
+    rgba(25, 50, 110, 0.15)
+  );
+
+  border: 1px solid rgba(130, 170, 255, 0.25);
+
+  box-shadow:
+    0 0 40px rgba(50, 100, 255, 0.2),
+    inset 0 0 30px rgba(80, 120, 255, 0.08);
+
+  backdrop-filter: blur(15px);
+}
+
+/* Caller */
+
+.caller-info {
+  margin-top: 25px;
+
+  text-align: center;
+}
+
+.caller-info h1 {
+  margin: 0;
+
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+}
+
+.caller-info p {
+  margin: 8px 0 0;
+
+  color: rgba(255, 255, 255, 0.45);
+
+  font-size: 14px;
+}
+
+/* Sound visualizer */
+
+.sound-waves {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  height: 32px;
+
+  margin-top: 25px;
+}
+
+.sound-waves span {
+  display: block;
+
+  width: 3px;
+  height: 10px;
+
+  border-radius: 10px;
+
+  background: rgba(120, 165, 255, 0.8);
+}
+
+/* Actions */
+
+.call-actions {
+  position: absolute;
+  bottom: 52px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  gap: 70px;
+}
+
+.call-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 12px;
+}
+
+.call-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 66px;
+  height: 66px;
+
+  border: none;
+  border-radius: 50%;
+
+  color: white;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.call-button svg {
+  flex-shrink: 0;
+  /* width: 20px;
+  height: 20px; */
+}
+
+.call-button--reject {
+  background: #ef4444;
+
+  box-shadow:
+    0 8px 30px rgba(239, 68, 68, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.call-button--accept {
+  background: #22c875;
+
+  box-shadow:
+    0 8px 30px rgba(34, 200, 117, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.call-button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 5px;
+}
+
+@media (max-width: 500px) {
+  .incoming-call__content {
+    padding-top: 55px;
+  }
+
+  .caller-avatar-wrapper {
+    margin-top: 45px;
+  }
+
+  .caller-info h1 {
+    font-size: 27px;
+  }
+
+  .call-actions {
+    bottom: 38px;
+    gap: 55px;
+  }
+}

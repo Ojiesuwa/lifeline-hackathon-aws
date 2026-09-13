@@ -1,0 +1,180 @@
+.glow {
+  position: fixed;
+  left: -10%;
+  bottom: -40px;
+  width: 120%;
+  height: 320px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.8;
+  filter: blur(45px);
+  animation: hueShift 18s ease-in-out infinite alternate;
+}
+
+.glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 20% 100%,
+      rgba(30, 100, 255, 0.5),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse at 50% 100%,
+      rgba(0, 190, 255, 0.4),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse at 80% 100%,
+      rgba(100, 70, 255, 0.45),
+      transparent 55%
+    );
+  animation: breathe 7s ease-in-out infinite alternate;
+}
+
+.glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 35% 110%,
+      rgba(70, 120, 255, 0.35),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 70% 110%,
+      rgba(20, 210, 255, 0.3),
+      transparent 45%
+    );
+  animation: drift 11s ease-in-out infinite alternate;
+}
+
+.blue,
+.cyan,
+.purple {
+  position: absolute;
+  bottom: -140px;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+}
+
+.blue {
+  left: 0%;
+  width: 45%;
+  height: 260px;
+  background: rgba(25, 90, 255, 0.45);
+  filter: blur(65px);
+  animation: floatBlue 9s ease-in-out infinite alternate;
+}
+
+.cyan {
+  left: 32%;
+  width: 38%;
+  height: 220px;
+  background: rgba(0, 200, 255, 0.4);
+  filter: blur(70px);
+  animation: floatCyan 12s ease-in-out infinite alternate;
+}
+
+.purple {
+  right: 0%;
+  width: 45%;
+  height: 250px;
+  background: rgba(110, 60, 255, 0.4);
+  filter: blur(65px);
+  animation: floatPurple 10s ease-in-out infinite alternate;
+}
+
+/* Slow global color movement */
+@keyframes hueShift {
+  0% {
+    filter: blur(45px) hue-rotate(0deg);
+  }
+
+  50% {
+    filter: blur(50px) hue-rotate(18deg);
+  }
+
+  100% {
+    filter: blur(45px) hue-rotate(-15deg);
+  }
+}
+
+/* Breathing */
+@keyframes breathe {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.65;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.85;
+  }
+
+  100% {
+    transform: scale(0.98);
+    opacity: 0.7;
+  }
+}
+
+/* Large slow movement */
+@keyframes drift {
+  0% {
+    transform: translateX(-8%) scale(1);
+  }
+
+  50% {
+    transform: translateX(5%) scale(1.1);
+  }
+
+  100% {
+    transform: translateX(-3%) scale(0.98);
+  }
+}
+
+@keyframes floatBlue {
+  0% {
+    transform: translate(-10%, 10%) scale(0.9);
+  }
+
+  50% {
+    transform: translate(15%, -15%) scale(1.15);
+  }
+
+  100% {
+    transform: translate(5%, 5%) scale(1);
+  }
+}
+
+@keyframes floatCyan {
+  0% {
+    transform: translate(-15%, 5%) scale(1);
+  }
+
+  50% {
+    transform: translate(10%, -20%) scale(1.2);
+  }
+
+  100% {
+    transform: translate(-5%, 0) scale(0.95);
+  }
+}
+
+@keyframes floatPurple {
+  0% {
+    transform: translate(10%, 5%) scale(0.95);
+  }
+
+  50% {
+    transform: translate(-15%, -15%) scale(1.15);
+  }
+
+  100% {
+    transform: translate(0, 5%) scale(1);
+  }
+}

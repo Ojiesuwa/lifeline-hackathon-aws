@@ -1,0 +1,38 @@
+.clock-ui {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  color: #fff;
+  user-select: none;
+  pointer-events: none;
+
+  padding-top: 40px;
+}
+
+.clock-time {
+  font-family: Arial, sans-serif;
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -1.5px;
+  font-variant-numeric: tabular-nums;
+
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.clock-date {
+  margin-top: 8px;
+
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.2;
+
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.1px;
+}
