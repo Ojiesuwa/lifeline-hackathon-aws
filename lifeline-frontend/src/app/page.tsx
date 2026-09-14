@@ -36,16 +36,10 @@ type OperationSummary = {
   totalCallDurationMs: number;
 };
 
-/*
- * Format milliseconds into a readable duration.
- * Pulled out of the component so it can be reused
- * without depending on component state/closures.
- */
 const formatDuration = (durationMs: number) => {
   const totalSeconds = Math.round(durationMs / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  
 
   if (minutes === 0) {
     return `${seconds}s`;
@@ -54,10 +48,6 @@ const formatDuration = (durationMs: number) => {
   return `${minutes}m ${seconds}s`;
 };
 
-/*
- * Animation variants for the summary panel container
- * and its children (staggered entrance).
- */
 const panelVariants = {
   hidden: { opacity: 0, y: 24, scale: 0.98 },
   show: {
@@ -90,13 +80,18 @@ const itemVariants = {
 
 const rowVariants = {
   hidden: { opacity: 0, x: -8 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.25 } },
-  exit: { opacity: 0, x: 8, transition: { duration: 0.15 } },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.25 },
+  },
+  exit: {
+    opacity: 0,
+    x: 8,
+    transition: { duration: 0.15 },
+  },
 };
 
-/*
- * A single "picked up / declined / failed" section card.
- */
 function PersonSection({
   icon,
   label,
@@ -118,6 +113,7 @@ function PersonSection({
           {icon}
           <span>{label}</span>
         </div>
+
         <span className="section-count">{people.length}</span>
       </div>
 
@@ -134,6 +130,7 @@ function PersonSection({
                 exit="exit"
               >
                 <span className="person-name">{person.name}</span>
+
                 {person.durationMs !== undefined && (
                   <span className="person-duration">
                     {formatDuration(person.durationMs)}
@@ -156,10 +153,6 @@ function PersonSection({
   );
 }
 
-/*
- * The full operation summary panel. Replaces the live
- * operation-list once the backend reports completion.
- */
 function OperationSummaryPanel({
   summary,
   onReset,
@@ -194,8 +187,10 @@ function OperationSummaryPanel({
           <div className="stat-icon">
             <Users size={20} />
           </div>
+
           <div className="stat-text">
             <span className="stat-value">{summary.totalPeopleCalled}</span>
+
             <span className="stat-label">People called</span>
           </div>
         </motion.div>
@@ -204,10 +199,12 @@ function OperationSummaryPanel({
           <div className="stat-icon">
             <Clock size={20} />
           </div>
+
           <div className="stat-text">
             <span className="stat-value">
               {formatDuration(summary.totalCallDurationMs)}
             </span>
+
             <span className="stat-label">Total call time</span>
           </div>
         </motion.div>
@@ -220,12 +217,14 @@ function OperationSummaryPanel({
           people={summary.pickedUp}
           accentClass="accent-success"
         />
+
         <PersonSection
           icon={<PhoneOff size={16} />}
           label="Declined"
           people={summary.declined}
           accentClass="accent-warning"
         />
+
         <PersonSection
           icon={<PhoneMissed size={16} />}
           label="Failed"
@@ -267,16 +266,13 @@ export default function Home() {
 
   const agentVariable = useRef<any>(null);
 
-  /*
-   * Keep conversation in a ref as well as state.
-   * This prevents stale state inside onDisconnect/onError.
-   */
   useEffect(() => {
     conversationRef.current = conversation;
   }, [conversation]);
 
   useEffect(() => {
     const el = operationListRef.current;
+
     if (!el) return;
 
     el.scrollTo({
@@ -318,9 +314,6 @@ export default function Home() {
 
           console.log("WebSocket message:", message);
 
-          /*
-           * Agent status update
-           */
           if (message.type === "AGENT_STATUS") {
             setOperation((prev) => [
               ...prev,
@@ -331,25 +324,14 @@ export default function Home() {
             ]);
           }
 
-          /*
-           * Call started
-           */
           if (message.type === "CALL_STARTED") {
             setCallState("active");
           }
 
-          /*
-           * Agent became active
-           */
           if (message.type === "AGENT_ACTIVE") {
             setAgentState("active");
           }
 
-          /*
-           * Lifeline wants to call a responder.
-           *
-           * Every call gets a new START_CALL message.
-           */
           if (message.type === "START_CALL") {
             console.log("Incoming responder call:", message.data);
 
@@ -359,14 +341,10 @@ export default function Home() {
             setCallState("incoming");
           }
 
-          /*
-           * Entire emergency operation has finished.
-           */
           if (message.type === "OPERATION_COMPLETE") {
             console.log("Operation complete:", message.summary);
 
             setOperationSummary(message.summary);
-            console.log(message.summary);
             setCallState("idle");
             acceptingRef.current = false;
           }
@@ -390,8 +368,6 @@ export default function Home() {
         setIsConnected(false);
 
         if (!isUnmounted) {
-          console.log("Retrying WebSocket connection in 3 seconds...");
-
           retryTimeoutRef.current = setTimeout(connect, 3000);
         }
       };
@@ -418,9 +394,6 @@ export default function Home() {
     };
   }, []);
 
-  /*
-   * Send message through WebSocket.
-   */
   const sendMessage = useCallback((data: unknown) => {
     const socket = socketRef.current;
 
@@ -438,17 +411,11 @@ export default function Home() {
     }
   }, []);
 
-  /*
-   * Start a new emergency operation.
-   */
   const handleAgentTrigger = () => {
     const emergency = text.trim();
 
     if (!emergency) return;
 
-    /*
-     * Clear previous operation data.
-     */
     setOperation([]);
     setOperationSummary(null);
 
@@ -467,13 +434,7 @@ export default function Home() {
     ]);
   };
 
-  /*
-   * Accept an incoming responder call.
-   */
   const handleAccept = async () => {
-    /*
-     * Prevent duplicate acceptance.
-     */
     if (acceptingRef.current) {
       console.log("⚠️ CALL ALREADY BEING ACCEPTED");
       return;
@@ -490,18 +451,12 @@ export default function Home() {
     });
 
     try {
-      /*
-       * Ask browser for microphone permission.
-       */
       await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
 
       console.log("Microphone permission granted");
 
-      /*
-       * Make sure we have a current ElevenLabs session.
-       */
       if (!sessionRef.current) {
         console.error("No ElevenLabs session");
 
@@ -511,9 +466,6 @@ export default function Home() {
         return;
       }
 
-      /*
-       * Start ElevenLabs conversation.
-       */
       const session = await Conversation.startSession({
         signedUrl: sessionRef.current,
 
@@ -521,17 +473,12 @@ export default function Home() {
 
         onConnect: () => {
           console.log("ElevenLabs connected");
-
           setCallState("active");
         },
 
         onDisconnect: () => {
           console.log("ElevenLabs disconnected");
 
-          /*
-           * Only end the call if there is
-           * actually an active conversation.
-           */
           if (conversationRef.current) {
             handleEndCall();
           }
@@ -539,10 +486,6 @@ export default function Home() {
 
         onError: (error) => {
           console.error("ElevenLabs error:", error);
-
-          /*
-           * Notify backend that this call ended.
-           */
           handleEndCall();
         },
 
@@ -551,9 +494,6 @@ export default function Home() {
         },
       });
 
-      /*
-       * Store the conversation in both state and ref.
-       */
       conversationRef.current = session;
       setConversation(session);
     } catch (error) {
@@ -561,21 +501,16 @@ export default function Home() {
 
       acceptingRef.current = false;
       conversationRef.current = null;
+
       setConversation(null);
       setCallState("idle");
 
-      /*
-       * Tell backend the call failed.
-       */
       sendMessage({
         type: "CALL_DECLINED",
       });
     }
   };
 
-  /*
-   * Decline the incoming responder call.
-   */
   const handleDecline = () => {
     console.log("❌ CALL DECLINED");
 
@@ -591,25 +526,15 @@ export default function Home() {
     });
   };
 
-  /*
-   * End the active ElevenLabs call.
-   */
   const handleEndCall = async () => {
-    /*
-     * Use the ref because state may be stale
-     * inside ElevenLabs callbacks.
-     */
     const activeConversation = conversationRef.current;
 
     if (!activeConversation) {
       return;
     }
 
-    /*
-     * Clear refs first so onDisconnect triggered
-     * by endSession doesn't call this function again.
-     */
     conversationRef.current = null;
+
     setConversation(null);
 
     acceptingRef.current = false;
@@ -617,6 +542,13 @@ export default function Home() {
     sessionRef.current = null;
     agentVariable.current = null;
 
+    /*
+     * Returning to idle here is intentional.
+     *
+     * On mobile this makes the logs visible again.
+     * On desktop it returns to the normal right-panel
+     * operation view.
+     */
     setCallState("idle");
 
     try {
@@ -625,27 +557,21 @@ export default function Home() {
       console.error("Error ending ElevenLabs session:", error);
     }
 
-    /*
-     * Tell the backend that this particular
-     * responder call has ended.
-     */
     sendMessage({
       type: "CALL_ENDED",
     });
   };
 
-  /*
-   * Reset everything back to its original, pre-operation state.
-   * Used by the "Reset" button on the summary panel.
-   */
   const handleReset = () => {
     setOperation([]);
     setOperationSummary(null);
+
     setAgentState("idle");
     setCallState("idle");
 
     acceptingRef.current = false;
     conversationRef.current = null;
+
     setConversation(null);
 
     sessionRef.current = null;
@@ -654,11 +580,27 @@ export default function Home() {
     setText(DEFAULT_EMERGENCY_TEXT);
   };
 
+  /*
+   * These classes only affect mobile CSS.
+   *
+   * Desktop keeps exactly the same layout.
+   */
+  const mobileCallActive = callState === "incoming" || callState === "active";
+
   return (
-    <div className="home">
+    <div className={`home ${mobileCallActive ? "mobile-call-active" : ""}`}>
       <div className="main">
-        {/* LEFT PHONE PANEL */}
-        <div className="left-panel">
+        {/* ==================================================
+            LEFT PHONE PANEL
+            Desktop: unchanged
+            Mobile: only visible during calls
+           ================================================== */}
+
+        <div
+          className={`left-panel ${
+            mobileCallActive ? "mobile-call-visible" : ""
+          }`}
+        >
           <div className="phone-screen">
             {callState === "idle" ? (
               <ClockUI />
@@ -669,11 +611,29 @@ export default function Home() {
             )}
           </div>
 
-          <img src="/phone.png" alt="" className="" />
+          <Image
+            src="/phone.png"
+            alt=""
+            width={2189}
+            height={4284}
+            className=""
+          />
         </div>
 
-        {/* RIGHT PANEL */}
-        <div className="right-panel">
+        {/* ==================================================
+            RIGHT PANEL
+            Desktop: unchanged
+            Mobile:
+            - input when idle
+            - logs when active
+            - hidden during call
+           ================================================== */}
+
+        <div
+          className={`right-panel ${
+            mobileCallActive ? "mobile-call-hidden" : ""
+          }`}
+        >
           {agentState === "idle" ? (
             <div className="input-wrapper">
               <div className="topBar">

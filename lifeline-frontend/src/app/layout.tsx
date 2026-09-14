@@ -26,7 +26,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "LifeLine",
-  description: "AI Agent for automating emergency calls ",
+  description: "AI agent for emergency call organization",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
